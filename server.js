@@ -2,6 +2,7 @@ const express=require('express')
 const dotenv = require('dotenv');
 dotenv.config({path: './config.env'});
 const app=express();
+const {globalErrorHandler}=require('./middleware/globalErrorMiddleWare')
 // app.use(bodyParser.json())
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))// to access request body
@@ -19,6 +20,7 @@ app.get('/',(req,res)=>{
     res.status(200).send('hi every one')
 })
 app.use('/api/v1/user/',router)
+app.use(globalErrorHandler)
 app.listen(port,()=>{
     console.log(`server is listenning ${port}` )
 })

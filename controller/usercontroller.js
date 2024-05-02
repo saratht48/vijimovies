@@ -1,29 +1,38 @@
 
 const User=require('../model/usermodel')
+const CustomError = require('../utils/customError')
 const createToken=require('../utils/jwt')
-const register=async(req,res)=>{
-     try{
+
+
+const assyncErrorHandler=(func)=>{
+    return (req,res,next)=>{
+        func(req,res,next).catch(err=>next(err))
+    }
+}
+const register=assyncErrorHandler(async(req,res,next)=>{
         console.log('mmmm')
         console.log(req.body)
        const {email,password,name}=req.body;
        console.log(email)
-
        if(!email || !password || !name){
-        return res.status(400).json({
-            message:"missing fields"
-         })
+        const error=new CustomError('missing fields',400)
+        next(error)
+        // return res.status(400).json({
+        //     message:"missing fields"
+        //  })
        }
-
        const existingUser=await User.findOne({email})
        if(existingUser){
-        return res.status(400).json({
-            message:"email already registered"
-         })
-       }
 
+        const error=new CustomError('email already registered',400)
+        next(error)
+
+        // return res.status(400).json({
+        //     message:"email already registered"
+        //  })
+       }
        const user=await User.create(
         req.body
-
        )
        const token=createToken({
         _id:user._id,
@@ -44,28 +53,21 @@ const register=async(req,res)=>{
             }
            })
        }
-     }catch(error){
-        res.status(400).json({
-            message:error.message
-        })
-     }
+
     
   
-}
-const login=async(req,res)=>{
+})
+const login=assyncErrorHandler(async(req,res,next)=>{
     console.log('entered in to login')
-    try{
         const {email,password}=req.body
         if(!email || !password ){
-            return res.status(400).json({
-                message:"missing fields"
-             })
+            const error=new CustomError('missing fields',400)
+            next(error)
            }
            const existingUser=await User.findOne({email})
            if(!existingUser){
-            return res.status(400).json({
-                message:"user does not exist"
-            })
+            const error=new CustomError('user does not exist',400)
+            next(error)
            }
            if(existingUser && existingUser.password===password){
             const token=createToken({
@@ -83,16 +85,16 @@ const login=async(req,res)=>{
                 email:existingUser.email,
                })
                
+           }else{
+            const error=new CustomError('password mismatch',400)
+            next(error)
            }
-    }catch(error){
-        res.status(400).json({
-            messaage:error.messaage
-        })
-    }
+
 
 
 
 }
+)
 module.exports={
     register,login
 }
