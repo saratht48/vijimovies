@@ -1,11 +1,12 @@
 const express=require('express')
 const {editMovie,addMovies, getAllMovies,
     getMovie}=require('../controller/moviesController')
+    const {protect} =require('../middleware/globalErrorMiddleWare')
 const movieRouter=express.Router()
 
-movieRouter.post('/',addMovies)
-movieRouter.patch('/:id',editMovie)
-movieRouter.get('/:id',getMovie)
-movieRouter.get('/',getAllMovies)
+movieRouter.post('/',protect,addMovies)
+movieRouter.patch('/:id',protect,editMovie)
+movieRouter.get('/:id',protect,getMovie)
+movieRouter.get('/',protect,getAllMovies)
 
 module.exports=movieRouter

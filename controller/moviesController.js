@@ -20,6 +20,7 @@ const addMovies=assyncErrorHandler(
 )
 
 const getAllMovies=assyncErrorHandler(async(req,res)=>{
+    console.log('lllll'+req.user._id)
     const movies=await Movie.find()
     if(movies){
         res.status(200).json({
