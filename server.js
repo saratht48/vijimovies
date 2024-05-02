@@ -11,15 +11,13 @@ app.use(express.static('./public'))
 // const bodyParser = require('body-parser');
 const {connectDB}=require('./config/db')
 const router=require('./Routes/userRoutes')
+const movieRouter=require('./Routes/moviesRoutes')
 
 connectDB()
 
 const port=process.env.PORT || 6000
-app.get('/',(req,res)=>{
-    console.log('request is accepted')
-    res.status(200).send('hi every one')
-})
 app.use('/api/v1/user/',router)
+app.use('/api/v1/movies/',movieRouter)
 app.use(globalErrorHandler)
 app.listen(port,()=>{
     console.log(`server is listenning ${port}` )
