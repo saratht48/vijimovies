@@ -7,6 +7,6 @@ const movieRouter=express.Router()
 movieRouter.post('/',protect,addMovies)
 movieRouter.patch('/:id',protect,editMovie)
 movieRouter.get('/:id',protect,getMovie)
-movieRouter.get('/',protect,getAllMovies)
+movieRouter.get('/',getAllMovies)
 
 module.exports=movieRouter
