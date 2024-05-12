@@ -1,4 +1,5 @@
 const Movie=require('../model/movieModal')
+const Show=require("../model/showModel")
 const CustomError = require('../utils/customError')
 const assyncErrorHandler=(func)=>{
     return (req,res,next)=>{
@@ -56,10 +57,44 @@ const editMovie=assyncErrorHandler(
         }
     }
 )
+
+const deleteMovie=assyncErrorHandler(async(req,res)=>{
+    const movieId=req.params.id
+    const deletedMovie=await Movie.findByIdAndDelete(movieId)
+    res.status(200).json({
+       status:"successfull",
+       message:deletedMovie
+    })
+
+
+})
+
+
+const getMyTheatureShow=assyncErrorHandler(async(req,res)=>{
+  const theatureId=req.params.theatureId
+  const shows=await Show.find({
+    theature:theatureId
+  })
+  res.status(200).json({
+    status:"successfull",
+    data:shows
+  })
+})
+
+const addShow=assyncErrorHandler(async(req,res,next)=>{
+    if(!req.body.theature || !req.body.movie){
+        const error=new CustomError('please mention movie and theature id')
+        next(error)
+
+    }
+   newShow=await Show.create(req.body)
+})
 module.exports={
     editMovie,
     addMovies,
     getAllMovies,
-    getMovie
+    getMovie,
+    deleteMovie,
+    getMyTheatureShow
 
 }

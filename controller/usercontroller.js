@@ -47,7 +47,8 @@ const register=assyncErrorHandler(async(req,res,next)=>{
                     name:user.name,
                     email:user.email,
                     _id:user._id,
-                    accesstoken:token
+                    accesstoken:token,
+                    isAdmin:user.isAdmin
                 }
 
             }
@@ -83,6 +84,7 @@ const login=assyncErrorHandler(async(req,res,next)=>{
                 _id:existingUser._id,
                 name:existingUser.name,
                 email:existingUser.email,
+                isAdmin:existingUser.isAdmin
                })
                
            }else{

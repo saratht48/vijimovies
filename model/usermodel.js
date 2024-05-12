@@ -17,6 +17,10 @@ const schema=new mongoose.Schema({
         required: [true, 'Please enter a password.'],
         minlength: 8
     },
+    isAdmin:{
+        type:Boolean,
+        default:false,
+    }
 })
 
 const User=mongoose.model('User',schema)

@@ -3,13 +3,17 @@ const express=require('express')
 const {  getAllTheatures,
     addTheature,
     updateTheature,
+    approveTheature,
+    deleteTheature,
     getAllmyTheature}=require('../controller/theatureController')
     const {protect} =require('../middleware/globalErrorMiddleWare')
 const theaturerouter=express.Router()
 
+theaturerouter.delete('/:id',protect,deleteTheature)
 theaturerouter.patch('/:id',protect,updateTheature)
 theaturerouter.post('/',protect,addTheature)
 theaturerouter.get('/mytheatures',protect,getAllmyTheature)
 theaturerouter.get('/',protect,getAllTheatures)
+theaturerouter.patch('/approvetheature/:id',protect,approveTheature)
 
 module.exports=theaturerouter
