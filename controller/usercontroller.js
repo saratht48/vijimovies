@@ -75,7 +75,8 @@ const login=assyncErrorHandler(async(req,res,next)=>{
                 _id:existingUser._id,
                 name:existingUser.name,
                 email:existingUser.email,
-              
+                isAdmin:existingUser.isAdmin
+                
                })
     
                res.status(200).json({

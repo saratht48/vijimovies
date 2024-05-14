@@ -15,9 +15,10 @@ const getAllTheatures=assyncErrorHandler(async(req,res,next)=>{
 })
 
 const getAllmyTheature=assyncErrorHandler(async(req,res)=>{
-       const id=req.user.id
+       const id=req.user._id
+       console.log(id,'llllll')
        console.log('id'+id)
-       const theatures=await Theature.find({_id:id})
+       const theatures=await Theature.find({user:id})
        res.status(200).json({
           message:"successfull",
           data:theatures
@@ -36,7 +37,7 @@ const addTheature=assyncErrorHandler(async(req,res)=>{
 })
 const deleteTheature=assyncErrorHandler(async(req,res)=>{
      const theatureId=req.params.id
-     const deletedTheature=await findByIdAndDelete(theatureId)
+     const deletedTheature=await Theature.findByIdAndDelete(theatureId)
      res.status(200).json({
         status:"successfull",
         message:deletedTheature
@@ -59,6 +60,7 @@ const updateTheature=assyncErrorHandler(async(req,res)=>{
 const approveTheature=assyncErrorHandler(async(req,res,next)=>{
   console.log(req.user.isAdmin)
   const id=req.params.id
+  console.log(req.user)
   if(req.user.isAdmin){
     const updatedTheature=await findByIdAndUpdate(id,{
         isApproved:true
@@ -77,7 +79,7 @@ const approveTheature=assyncErrorHandler(async(req,res,next)=>{
   
 })
 
-
+//66437da31fe6f05e24a10fde
 
 
 
