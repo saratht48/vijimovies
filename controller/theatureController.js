@@ -76,13 +76,8 @@ const approveTheature=assyncErrorHandler(async(req,res,next)=>{
     const error =new CustomError("you are not admin to perform this action")
     next(error)
   }
-  
 })
-
 //66437da31fe6f05e24a10fde
-
-
-
 module.exports={
     deleteTheature,
     getAllTheatures,
