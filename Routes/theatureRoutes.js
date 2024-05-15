@@ -20,9 +20,9 @@ theaturerouter.get('/mytheatures',protect,getAllmyTheature)
 theaturerouter.get('/',protect,getAllTheatures)
 theaturerouter.patch('/approvetheature/:id',protect,approveTheature)
 theaturerouter.post('/shows',protect,addShow)
-theaturerouter.get('/shows/theatureId',protect,getAllMyShow)
-theaturerouter.get('/shows/movieId',protect,getAllMovieShow)
-theaturerouter.patch('/shows/showId',protect,updateShow)
+theaturerouter.get('/shows/theature/:theatureId',protect,getAllMyShow)
+theaturerouter.get('/shows/movie/:movieId',protect,getAllMovieShow)
+theaturerouter.patch('/shows/:showId',protect,updateShow)
 
 
 module.exports=theaturerouter

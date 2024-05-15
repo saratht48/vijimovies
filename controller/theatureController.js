@@ -63,7 +63,7 @@ const approveTheature=assyncErrorHandler(async(req,res,next)=>{
   const id=req.params.id
   console.log(req.user)
   if(req.user.isAdmin){
-    const updatedTheature=await findByIdAndUpdate(id,{
+    const updatedTheature=await Theature.findByIdAndUpdate(id,{
         isApproved:true
     },{
         new:true
@@ -86,10 +86,9 @@ const addShow=assyncErrorHandler(async(req,res,next)=>{
         const error=new CustomError('complete all the fields',400)
         next(error)
      }
-
           const theatureId=req.body.theature;
-          const newtheature=await Theature.find({_id:theatureId})
-          if(newtheature.user!==req.user._id){
+          const newtheature=await Theature.findOne({_id:theatureId})
+          if(newtheature.user.toString()!==req.user._id.toString()){
             const error=new CustomError('you dont have permission to perform this action',400)
             next(error)
           }
@@ -108,14 +107,15 @@ const addShow=assyncErrorHandler(async(req,res,next)=>{
 
 })
 
-const getAllMyShow=assyncErrorHandler(async(req,res)=>{
+const getAllMyShow=assyncErrorHandler(async(req,res,next)=>{
 
-     
+      console.log('getAllMyShow')
         const theatureId=req.params.theatureId;
 
-        const theature=await Theature.find({_id:theatureId})
-        if(theature.user!==req.user._id){
+        const theature=await Theature.findOne({_id:theatureId})
+        if(theature.user.toString()!==req.user._id.toString()){
             const error=new CustomError('you dont have permission to perform this action',400)
+            next(error)
         }
         const  shows=await Show.find({theature:theatureId})
         res.status(200).json({
@@ -125,6 +125,7 @@ const getAllMyShow=assyncErrorHandler(async(req,res)=>{
 })
 const getAllMovieShow=assyncErrorHandler(async(req,res)=>{
             const movieId=req.params.movieId
+            console.log(movieId,'gggggggggggggg')
             const shows=await Show.find({movie:movieId})
             res.status(200).json({
                   sstatus: 'success',
@@ -135,7 +136,7 @@ const getAllMovieShow=assyncErrorHandler(async(req,res)=>{
 const updateShow=assyncErrorHandler(async(req,res)=>{
     const showId=req.params.showId
     const show=await Show.findByIdAndUpdate(showId,req.body,{new:true})
-    re.status(200).json({
+    res.status(200).json({
         status:"updated",
         data:show
     })
@@ -155,3 +156,7 @@ module.exports={
     getAllMovieShow,
     updateShow
 }
+
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NjQ0ZTlmOGEyZmNlNjg0NGYwODRkOWIiLCJuYW1lIjoicmFtdSIsImVtYWlsIjoicmFtdUBnbWFpbC5jb20iLCJpYXQiOjE3MTU3OTIzNzYsImV4cCI6MTcxNTc5NTk3Nn0.3oml7ohwkLOX6nbsWiMpMfSzz_TgHeIl2nRCz1O-pbw
+//6644eb1f56dd725673e76c95-thaeature
+//6644e9f8a2fce6844f084d9b
