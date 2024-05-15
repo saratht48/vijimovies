@@ -27,6 +27,7 @@ const schema=new mongoose.Schema({
    },
    bookedSeats:{
     type:Number,
+    default:0
    },
    ticketPrice : {
     type: Number,

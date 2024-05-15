@@ -5,7 +5,11 @@ const {  getAllTheatures,
     updateTheature,
     approveTheature,
     deleteTheature,
-    getAllmyTheature}=require('../controller/theatureController')
+    getAllmyTheature,
+    addShow,
+    getAllMyShow,
+    updateShow,
+    getAllMovieShow}=require('../controller/theatureController')
     const {protect} =require('../middleware/globalErrorMiddleWare')
 const theaturerouter=express.Router()
 
@@ -15,5 +19,10 @@ theaturerouter.post('/',protect,addTheature)
 theaturerouter.get('/mytheatures',protect,getAllmyTheature)
 theaturerouter.get('/',protect,getAllTheatures)
 theaturerouter.patch('/approvetheature/:id',protect,approveTheature)
+theaturerouter.post('/shows',protect,addShow)
+theaturerouter.get('/shows/theatureId',protect,getAllMyShow)
+theaturerouter.get('/shows/movieId',protect,getAllMovieShow)
+theaturerouter.patch('/shows/showId',protect,updateShow)
+
 
 module.exports=theaturerouter

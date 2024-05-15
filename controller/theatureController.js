@@ -1,3 +1,4 @@
+const Show = require('../model/showModel')
 const Theature=require('../model/theatureModel')
 const { findByIdAndUpdate, findByIdAndDelete } = require('../model/usermodel')
 const CustomError=require('../utils/customError')
@@ -73,10 +74,74 @@ const approveTheature=assyncErrorHandler(async(req,res,next)=>{
     })
   }
   else{
-    const error =new CustomError("you are not admin to perform this action")
+    const error =new CustomError("you are not admin to perform this action",400)
     next(error)
   }
 })
+
+const addShow=assyncErrorHandler(async(req,res,next)=>{
+       const {theature,movie,name,date,time,totalSeats,ticketPrice}=req.body
+
+     if(!theature || !movie || !name || !date || !time || !totalSeats || !ticketPrice){
+        const error=new CustomError('complete all the fields',400)
+        next(error)
+     }
+
+          const theatureId=req.body.theature;
+          const newtheature=await Theature.find({_id:theatureId})
+          if(newtheature.user!==req.user._id){
+            const error=new CustomError('you dont have permission to perform this action',400)
+            next(error)
+          }
+          const show=await Show.create(
+            req.body
+          ) 
+          if(show){
+            res.status(201).json({
+                    status: 'success',
+                    data: show
+            })
+          }else{
+            const error=new CustomError('show not created',400)
+            next(error)
+          }
+
+})
+
+const getAllMyShow=assyncErrorHandler(async(req,res)=>{
+
+     
+        const theatureId=req.params.theatureId;
+
+        const theature=await Theature.find({_id:theatureId})
+        if(theature.user!==req.user._id){
+            const error=new CustomError('you dont have permission to perform this action',400)
+        }
+        const  shows=await Show.find({theature:theatureId})
+        res.status(200).json({
+            status: 'success',
+            data: shows
+})
+})
+const getAllMovieShow=assyncErrorHandler(async(req,res)=>{
+            const movieId=req.params.movieId
+            const shows=await Show.find({movie:movieId})
+            res.status(200).json({
+                  sstatus: 'success',
+                  data: shows
+            })
+})
+
+const updateShow=assyncErrorHandler(async(req,res)=>{
+    const showId=req.params.showId
+    const show=await Show.findByIdAndUpdate(showId,req.body,{new:true})
+    re.status(200).json({
+        status:"updated",
+        data:show
+    })
+})
+
+
 //66437da31fe6f05e24a10fde
 module.exports={
     deleteTheature,
@@ -84,5 +149,9 @@ module.exports={
     addTheature,
     updateTheature,
     getAllmyTheature,
-    approveTheature
+    approveTheature,
+    addShow,
+    getAllMyShow,
+    getAllMovieShow,
+    updateShow
 }
